@@ -12,7 +12,7 @@ namespace VideoStreaming
         private EndPoint? _ip;
         private IPEndPoint _serverIp;
         private Socket _clientSocket;
-        private int MAX_MB = 1;
+        private int MAX_MB = 10;
 
         public Client(int port, int clientID)
         {
@@ -32,8 +32,7 @@ namespace VideoStreaming
             try
             {
                 byte[] file = System.IO.File.ReadAllBytes(fileName);
-                byte[] clientData = new byte[1024 * 1024 * this.MAX_MB];
-
+                // byte[] clientData = new byte[1024 * 1024 * this.MAX_MB];
                 this._clientSocket.Send(file);
             }
             catch (Exception e)
@@ -48,7 +47,7 @@ namespace VideoStreaming
             {
                 this._clientSocket.Connect(this._serverIp);
                 Console.WriteLine("Client connected : {0} {1}", this._ip, this._clientId);
-                SendFile("design.pdf");
+                SendFile("cow.mp4");
                 // byte[] endMessage = Encoding.ASCII.GetBytes("<EOF>");
                 // this._clientSocket.Send(endMessage);
             }

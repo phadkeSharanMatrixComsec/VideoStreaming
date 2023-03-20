@@ -33,21 +33,21 @@ namespace VideoStreaming
 
         public void GetData(Socket clientSocket)
         {
-            BinaryWriter writer = new BinaryWriter(File.Open("output.pdf", FileMode.Append));
-
-            while(true)
+            BinaryWriter writer = new BinaryWriter(File.Open("cow.mp4", FileMode.Append));
+            int total = 0;
+            byte[] clientData = new Byte[1024 * 1024 * MAX_MB];
+            // int numBytes = clientSocket.Receive(clientData);
+            byte[] buffer = new Byte[1024 * 1024 * MAX_MB];
+            int recvBytes;
+            while((recvBytes = clientSocket.Receive(buffer)) > 0)
             {
-                byte[] clientData = new Byte[1024 * 1024 * MAX_MB];
-                // int numBytes = clientSocket.Receive(clientData);
-                byte[] buffer = new Byte[1024 * 1024 * MAX_MB];
-                int recvBytes;
-                while((recvBytes = clientSocket.Receive(buffer)) > 0)
-                {
-                    Buffer.BlockCopy(buffer, 0, clientData, 0, recvBytes);
-                    Console.WriteLine($"size : {recvBytes}");
-                    writer.Write(clientData);
-                }
+                Buffer.BlockCopy(buffer, 0, clientData, 0, recvBytes);
+                Console.WriteLine($"size : {recvBytes}");
+                writer.Write(clientData, 0, recvBytes);
+                total += recvBytes;
             }
+
+            Console.WriteLine(total);
         }
 
         public void Connect()
