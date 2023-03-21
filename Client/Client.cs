@@ -33,7 +33,15 @@ namespace VideoStreaming
             {
                 byte[] file = System.IO.File.ReadAllBytes(fileName);
                 // byte[] clientData = new byte[1024 * 1024 * this.MAX_MB];
-                this._clientSocket.Send(file);
+                byte[] fileInfoBuffer = new byte[32];
+                byte[] fileInfo = Encoding.ASCII.GetBytes(fileName);
+                Buffer.BlockCopy(fileInfo, 0, fileInfoBuffer, 0, fileInfo.Length);
+                Console.WriteLine($"file : {Encoding.ASCII.GetString(fileInfoBuffer)}");
+                byte[] filedata = new byte[file.Length + 32];
+                Console.WriteLine($"fileInfoBufferLenght {fileInfoBuffer.Length}");
+                Buffer.BlockCopy(fileInfoBuffer, 0, filedata, 0, 32);
+                Buffer.BlockCopy(file, 0, filedata, 32, file.Length);
+                this._clientSocket.Send(filedata);
             }
             catch (Exception e)
             {
